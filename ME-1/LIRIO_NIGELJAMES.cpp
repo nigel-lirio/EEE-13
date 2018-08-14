@@ -6,6 +6,7 @@ int main()
 {
     int n;    
     cin >> n;
+    //nth grey code can be obtained 
     for(int i = 0; i < pow(2, n); i++)
     {
         cout << (i ^ (i/2)) << endl;
