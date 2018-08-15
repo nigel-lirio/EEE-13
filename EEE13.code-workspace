@@ -4,5 +4,9 @@
 			"path": "ME-1"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"ostream": "cpp"
+		}
+	}
 }

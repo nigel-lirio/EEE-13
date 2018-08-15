@@ -1,15 +1,16 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
-// Approach taken from https://en.wikipedia.org/wiki/Gray_code#Constructing_an_n-bit_Gray_code
+/* Approach taken from https://en.wikipedia.org/wiki/Gray_code#Constructing_an_n-bit_Gray_code
+ nth grey code can be obtained by: XORing Nth term with the floor of itself divided by 2 OR shifted to the right by one */
 int main()
 {
     int n;    
     cin >> n;
-    //nth grey code can be obtained 
-    for(int i = 0; i < pow(2, n); i++)
+    
+    for(int bit = 0; bit < pow(2, n); bit++)
     {
-        cout << (i ^ (i/2)) << endl;
+        cout << (bit ^ (bit >> 1)) << endl;
     }
     return 0;
 }
