@@ -8,8 +8,7 @@ int main()
     int n;    
     cin >> n;
     
-    for(int bit = 0; bit < pow(2, n); bit++)
-    {
+    for(int bit = 0; bit < pow(2, n); bit++){
         cout << (bit ^ (bit >> 1)) << endl;
     }
     return 0;
