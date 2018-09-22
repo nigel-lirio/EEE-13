@@ -1,2 +1,0 @@
-g++ -Wall -Wextra main.cpp LIRIO_NIGEL_ME01.cpp -o main
-./main
