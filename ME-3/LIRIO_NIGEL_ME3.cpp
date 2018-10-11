@@ -1,8 +1,6 @@
 #include <iostream>
 #include <stack>
 using namespace std;
-//stack<int> top;
-//stack<int> bot;
 void span(int *city, int n, int *spans){
   /* ALGORITHM BASED ON:
     https://www.geeksforgeeks.org/the-stock-span-problem/
