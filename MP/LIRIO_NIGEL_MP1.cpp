@@ -2,6 +2,7 @@
 #include <vector>
 #include <list>
 #include <queue>
+#include <algorithm>
 #include <utility>
 #include <string>
 #include <map>
@@ -96,9 +97,5 @@ int main(){
             input_queue.push(input);
         }
     }
-    while(!input_queue.empty()){
-        input = input_queue.front();
-        cout << input << endl;
-        input_queue.pop();
-    }
+    start(Q);
 }
