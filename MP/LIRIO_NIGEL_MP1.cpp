@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 #include <list>
 #include <queue>
 #include <algorithm>
@@ -48,7 +47,7 @@ void Node::node_costs(int node, int cost){
 }
 // GLOBAL VARIABLES
 vector<Node> masterList;
-list<Node> currentList; //FOR ALLOW AND FORBID REMOVE STRING FROM ITERATION LIST
+vector<Node> currentList; //FOR ALLOW AND FORBID REMOVE STRING FROM ITERATION LIST
 map<std::string, int> func;
 queue<std::string> input_queue;
 vector<std::vector<int> > adjMatrix;
@@ -82,21 +81,84 @@ void fill_costs(int N){
     }
   }
 }
-/*
-int get_total_cost(std::string A, std::string B){
+
+void MakeGraph(){
+    int current_elements = currentList.size(), i, j, k;
+    if(!adjMatrix.empty()){
+        adjMatrix.clear();
+    }
+    adjMatrix.resize(current_elements);
+    for(i=0; i < current_elements; i++){
+        cout << currentList[i].fid() << ":";
+        adjMatrix[i].resize(current_elements);
+        for(j = 0; j < current_elements; j++){
+            if(currentList[i].fid() == j){
+                adjMatrix[i].push_back(0);
+            }
+            else{
+                adjMatrix[i][j] = currentList[i].fbase_cost(j);
+            }
+            cout << " " << adjMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+    for(k = 0; k < current_elements; k++){
+        for(i = 0; i < current_elements; i++){
+            for(j = 0; j < current_elements; j++){
+                adjMatrix[i][j] = min(adjMatrix[i][j], adjMatrix[i][k] + adjMatrix[k][j]);
+            }
+        }
+    }
+    for(i = 0; i < current_elements; i++){
+        cout << currentList[i].fid() << ":";
+        for(j = 0; j < current_elements; j++){
+            cout << " " << adjMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}/*
+void remove_node(int node){
+
+}
+void add_node(int node){
+
+}
+int get_total_cost(){
 
 }*/
-
 void start(int Q){
-    for(int i = 0; i < Q; i++){
-        //MakeGraph(currentList);
+    MakeGraph();
+    array<std::string, 2> inputq;
+    string inp;
+    int i, k;
+    for(i = 0; i < Q; i++){
+        inp = input_queue.front();
+        input_queue.pop();
+        switch(func.find(inp)->second){
+            case 0:
+                for(k = 0; k < 2; k++){
+                    inp = input_queue.front();
+                    inputq[k] = inp;
+                    input_queue.pop();
+                }
+                cout << "TOTAL COST OF " << inputq[0] << " and" << inputq[1] << endl;
+                break;
+            case 1:
+                inp = input_queue.front();
+                input_queue.pop();
+                cout << "ALLOW NODE: " << inp << endl;
+                //MakeGraph();
+                break;
+            case 2:
+                inp = input_queue.front();
+                input_queue.pop();
+                cout << "REMOVE NODE: " << inp << endl;
+                //MakeGraph();
+                break;
+        }
     }
 }
-void constructCurrentList(){
-  for(int i = 0; i < masterList.size(); i++){
-    
-  }
-}
+
 int main(){
     int N, Q, i;
     func["COST"] = 0;
@@ -112,6 +174,7 @@ int main(){
          masterList.push_back(temp);
     }
     fill_costs(N);
+    currentList = masterList;
     for(i = 0; i < Q; i++){
         //GET OPERATIONS
         cin >> input;
@@ -127,12 +190,14 @@ int main(){
             input_queue.push(input);
         }
     }
+    
+    /*
     for(i = 0; i < N; i++){
       for(int j = 0; j < N; j++){
-        if(j != masterList[i].fid()){
-          cout<< masterList[i].fid() << "Cost to " << j << ": " << masterList[i].fbase_cost(j) << endl;
+        if(j != currentList[i].fid()){
+          cout<< currentList[i].fid() << "Cost to " << j << ": " << currentList[i].fbase_cost(j) << endl;
         }
       }
-    }
-    //start(Q);
+    }*/
+    start(Q);
 }
