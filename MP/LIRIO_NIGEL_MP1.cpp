@@ -89,7 +89,6 @@ void MakeGraph(){
     }
     adjMatrix.resize(current_elements);
     for(i=0; i < current_elements; i++){
-        cout << currentList[i].fid() << ":";
         adjMatrix[i].resize(current_elements);
         for(j = 0; j < current_elements; j++){
             if(currentList[i].fid() == j){
@@ -98,9 +97,7 @@ void MakeGraph(){
             else{
                 adjMatrix[i][j] = currentList[i].fbase_cost(j);
             }
-            cout << " " << adjMatrix[i][j] << " ";
         }
-        cout << endl;
     }
     for(k = 0; k < current_elements; k++){
         for(i = 0; i < current_elements; i++){
@@ -109,23 +106,26 @@ void MakeGraph(){
             }
         }
     }
-    for(i = 0; i < current_elements; i++){
-        cout << currentList[i].fid() << ":";
-        for(j = 0; j < current_elements; j++){
-            cout << " " << adjMatrix[i][j] << " ";
-        }
-        cout << endl;
-    }
 }/*
-void remove_node(int node){
+void remove_node(std::string A){
 
 }
-void add_node(int node){
-
-}
-int get_total_cost(){
+void add_node(std::string A){
 
 }*/
+int get_total_cost(std::string A, std::string B){
+    int current_elements = currentList.size();
+    int x, y;
+    for(int i = 0; i < current_elements; i++){
+        if(A == currentList[i].fword()){
+            x = currentList[i].fid();
+        }
+        else if(B == currentList[i].fword()){
+            y = currentList[i].fid();
+        }
+    }
+    return adjMatrix[x][y];
+}
 void start(int Q){
     MakeGraph();
     array<std::string, 2> inputq;
@@ -141,7 +141,7 @@ void start(int Q){
                     inputq[k] = inp;
                     input_queue.pop();
                 }
-                cout << "TOTAL COST OF " << inputq[0] << " and" << inputq[1] << endl;
+                cout << get_total_cost(inputq[0], inputq[1]) << endl;
                 break;
             case 1:
                 inp = input_queue.front();
