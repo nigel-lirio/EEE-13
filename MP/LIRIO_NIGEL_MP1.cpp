@@ -84,21 +84,26 @@ void fill_costs(int N){
 
 void MakeGraph(){
     int current_elements = currentList.size(), i, j, k;
-    if(!adjMatrix.empty()){
-        adjMatrix.clear();
-    }
+    adjMatrix.clear();
     adjMatrix.resize(current_elements);
     for(i=0; i < current_elements; i++){
         adjMatrix[i].resize(current_elements);
         for(j = 0; j < current_elements; j++){
-            if(currentList[i].fid() == j){
+            if(i == j){
                 adjMatrix[i].push_back(0);
             }
             else{
-                adjMatrix[i][j] = currentList[i].fbase_cost(j);
+                adjMatrix[i][j] = currentList[i].fbase_cost(currentList[j].fid());
             }
         }
     }
+    /*for(i=0; i < current_elements; i++){
+        cout << i << ": ";
+        for(j = 0; j < current_elements; j++){
+            cout << adjMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }*/
     for(k = 0; k < current_elements; k++){
         for(i = 0; i < current_elements; i++){
             for(j = 0; j < current_elements; j++){
@@ -106,22 +111,33 @@ void MakeGraph(){
             }
         }
     }
-}/*
-void remove_node(std::string A){
-
 }
-void add_node(std::string A){
-
-}*/
-int get_total_cost(std::string A, std::string B){
+void remove_node(std::string A){
     int current_elements = currentList.size();
-    int x, y;
     for(int i = 0; i < current_elements; i++){
         if(A == currentList[i].fword()){
-            x = currentList[i].fid();
+            currentList.erase(currentList.begin()+i);
+            break;
+        }
+    }
+}
+void add_node(std::string A){
+    int total_elements = masterList.size();
+    for(int i = 0; i < total_elements; i++){
+        if(A == masterList[i].fword()){
+            currentList.push_back(masterList[i]);
+            break;
+        }
+    }
+}
+int get_total_cost(std::string A, std::string B){
+    int current_elements = currentList.size(), x, y;
+    for(int i = 0; i < current_elements; i++){
+        if(A == currentList[i].fword()){
+            x = i;
         }
         else if(B == currentList[i].fword()){
-            y = currentList[i].fid();
+            y = i;
         }
     }
     return adjMatrix[x][y];
@@ -146,14 +162,14 @@ void start(int Q){
             case 1:
                 inp = input_queue.front();
                 input_queue.pop();
-                cout << "ALLOW NODE: " << inp << endl;
-                //MakeGraph();
+                add_node(inp);
+                MakeGraph();
                 break;
             case 2:
                 inp = input_queue.front();
                 input_queue.pop();
-                cout << "REMOVE NODE: " << inp << endl;
-                //MakeGraph();
+                remove_node(inp);
+                MakeGraph();
                 break;
         }
     }
@@ -190,14 +206,5 @@ int main(){
             input_queue.push(input);
         }
     }
-    
-    /*
-    for(i = 0; i < N; i++){
-      for(int j = 0; j < N; j++){
-        if(j != currentList[i].fid()){
-          cout<< currentList[i].fid() << "Cost to " << j << ": " << currentList[i].fbase_cost(j) << endl;
-        }
-      }
-    }*/
     start(Q);
 }
