@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include <list>
 #include <queue>
 #include <algorithm>
@@ -7,11 +8,6 @@
 #include <string>
 #include <map>
 using namespace std;
-// GLOBAL VARIABLES
-vector<Node> masterList;
-list<Node> currentList; //FOR ALLOW AND FORBID REMOVE STRING FROM ITERATION LIST
-map<std::string, int> func;
-queue<std::string> input_queue;
 //CLASSES
 class Node{
     int id;
@@ -23,7 +19,7 @@ class Node{
     int fid();
     bool compare(std::string);
     int fbase_cost(int);
-    void node_costs(int);
+    void node_costs(int, int);
 };
 Node::Node(std::string inp, int N, int z){
     this->id = z;
@@ -47,25 +43,59 @@ bool Node::compare(std::string A){
 int Node::fbase_cost(int A){
     return this->base_cost.find(A)->second;
 }
-void Node::node_costs(int N){
-    for(int a =0; a < N; a++){
-        if(a != this->id){
-            base_cost[a] = get_base_cost(this->word, masterList[a].fword());
-        }
-    }
+void Node::node_costs(int node, int cost){
+    this->base_cost[node] = cost;
 }
+// GLOBAL VARIABLES
+vector<Node> masterList;
+list<Node> currentList; //FOR ALLOW AND FORBID REMOVE STRING FROM ITERATION LIST
+map<std::string, int> func;
+queue<std::string> input_queue;
+vector<std::vector<int> > adjMatrix;
 //FUNCTIONS
-
 int get_base_cost(std::string A, std::string B){
-
-}/*
+    //Algorithm based on https://www.geeksforgeeks.org/longest-common-subsequence-dp-4/
+    int length = A.length();
+    int VAL[length+1][length + 1];
+    for(int i = 0; i <= length; i++){
+      for(int j = 0; j <= length; j++){
+        if(i == 0 || j == 0){
+          VAL[i][j] = 0;
+        }
+        else if(A[i-1] == B[j-1]){
+          VAL[i][j] = VAL[i-1][j-1] + 1;
+        }
+        else{
+          VAL[i][j] = max(VAL[i-1][j], VAL[i][j-1]);
+        }
+      }
+    }
+  int dis = (length - VAL[length][length]) * 2;
+  return (dis * dis);
+}
+void fill_costs(int N){
+  for(int i = 0; i < N; i++){
+    for(int j = 0; j < N; j++){
+      if(masterList[i].fid() != j){
+        masterList[i].node_costs(j, get_base_cost(masterList[i].fword(), masterList[j].fword()));
+      }
+    }
+  }
+}
+/*
 int get_total_cost(std::string A, std::string B){
 
 }*/
+
 void start(int Q){
     for(int i = 0; i < Q; i++){
         //MakeGraph(currentList);
     }
+}
+void constructCurrentList(){
+  for(int i = 0; i < masterList.size(); i++){
+    
+  }
 }
 int main(){
     int N, Q, i;
@@ -80,8 +110,8 @@ int main(){
          cin >> input;
          Node temp(input, N, i);
          masterList.push_back(temp);
-         currentList.push_back(temp);
     }
+    fill_costs(N);
     for(i = 0; i < Q; i++){
         //GET OPERATIONS
         cin >> input;
@@ -97,5 +127,12 @@ int main(){
             input_queue.push(input);
         }
     }
-    start(Q);
+    for(i = 0; i < N; i++){
+      for(int j = 0; j < N; j++){
+        if(j != masterList[i].fid()){
+          cout<< masterList[i].fid() << "Cost to " << j << ": " << masterList[i].fbase_cost(j) << endl;
+        }
+      }
+    }
+    //start(Q);
 }
